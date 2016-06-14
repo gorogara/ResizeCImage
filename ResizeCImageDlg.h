@@ -42,6 +42,6 @@ public:
 	CEdit m_EditHeight;
 	afx_msg void OnBnClickedButtonResize();
 
-	bool ResizeCImage(CString _pathSrc, CString _pathDst);
+	bool ResizeCImage(CString _pathSrc, CString _pathDst, int _newWidth, int _newHeight);
 	void SetSize();
 };

@@ -191,7 +191,9 @@ void CResizeCImageDlg::OnBnClickedButtonSelect()
 void CResizeCImageDlg::OnBnClickedButtonResize()
 {
 	// TODO: Add your control notification handler code here
-	if (ResizeCImage(pathSrc, _T("resized_image.") + extSrc))
+	SetSize();
+
+	if (ResizeCImage(pathSrc, _T("resized_image.") + extSrc, iNewWidth, iNewHeight))
 		AfxMessageBox(_T("Success!"));
 	else
 		AfxMessageBox(_T("Failed!"));
@@ -209,10 +211,8 @@ void CResizeCImageDlg::SetSize()
 }
 
 
-bool CResizeCImageDlg::ResizeCImage(CString _pathSrc, CString _pathDst)
+bool CResizeCImageDlg::ResizeCImage(CString _pathSrc, CString _pathDst, int _newWidth, int _newHeight)
 {
-	SetSize();
-
 	CImage srcImage;
 	HRESULT res = srcImage.Load(_pathSrc);
 
@@ -220,7 +220,7 @@ bool CResizeCImageDlg::ResizeCImage(CString _pathSrc, CString _pathDst)
 	{
 		// 새 이미지 생성
 		CImage dstImage;
-		dstImage.CreateEx(iNewWidth, iNewHeight, 32, BI_RGB, NULL, dstImage.createAlphaChannel);
+		dstImage.CreateEx(_newWidth, _newHeight, 32, BI_RGB, NULL, dstImage.createAlphaChannel);
 
 		// StretchBlt 모드 설정
 		SetStretchBltMode(dstImage.GetDC(), WHITEONBLACK);
@@ -228,7 +228,7 @@ bool CResizeCImageDlg::ResizeCImage(CString _pathSrc, CString _pathDst)
 
 		// StretchBlt 실행
 		srcImage.SetTransparentColor(RGB(255, 255, 255));
-		srcImage.StretchBlt(dstImage.GetDC(), 0, 0, iNewWidth, iNewHeight, SRCCOPY);
+		srcImage.StretchBlt(dstImage.GetDC(), 0, 0, _newWidth, _newHeight, SRCCOPY);
 		dstImage.ReleaseDC();
 
 		dstImage.Save(_pathDst);
